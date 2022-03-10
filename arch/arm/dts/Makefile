@@ -888,6 +888,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mn-ab2.dtb \
 	imx8mm-var-dart-customboard.dtb \
 	imx8mm-var-som-symphony.dtb \
+	imx8mp-var-som-m5pro.dtb \
 
 dtb-$(CONFIG_ARCH_IMXRT) += imxrt1050-evk.dtb \
 	imxrt1020-evk.dtb
