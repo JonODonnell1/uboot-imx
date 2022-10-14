@@ -24,8 +24,7 @@
 		regulator-name = "VSD_3V3";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
-//		gpio = <&gpio4 22 GPIO_ACTIVE_HIGH>;
-		gpio = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+		gpio = <&gpio4 22 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 		startup-delay-us = <100>;
 		off-on-delay-us = <12000>;
@@ -48,6 +47,21 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_uart2>;
 	status = "okay";
+};
+
+&i2c2 {
+	clock-frequency = <400000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_i2c2>;
+	scl-gpios = <&gpio5 16 GPIO_ACTIVE_HIGH>;
+	sda-gpios = <&gpio5 17 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+
+//	eeprom@50 {
+//		compatible = "atmel,24c02";
+//		reg = <0x50>;
+//		status = "okay";
+//	};
 };
 
 //&i2c3 {
@@ -102,7 +116,7 @@
 //};
 
 &i2c4 {
-	clock-frequency = <100000>;
+	clock-frequency = <400000>;
 //	pinctrl-names = "default", "gpio";
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c4>;
@@ -189,6 +203,13 @@
 		fsl,pins = <
 			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX				0x40
 			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX				0x40
+		>;
+	};
+
+	pinctrl_i2c2: i2c2grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL					0x400001c2
+			MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA					0x400001c2
 		>;
 	};
 

@@ -49,59 +49,74 @@
 	status = "okay";
 };
 
-&i2c3 {
-	clock-frequency = <100000>;
-	pinctrl-names = "default", "gpio";
-	pinctrl-0 = <&pinctrl_i2c3>;
-	pinctrl-1 = <&pinctrl_i2c3_gpio>;
-	scl-gpios = <&gpio5 18 GPIO_ACTIVE_HIGH>;
-	sda-gpios = <&gpio5 19 GPIO_ACTIVE_HIGH>;
+&i2c2 {
+	clock-frequency = <400000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_i2c2>;
+	scl-gpios = <&gpio5 16 GPIO_ACTIVE_HIGH>;
+	sda-gpios = <&gpio5 17 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 
-	/* GPIO expander */
-	pca9534: gpio@20 {
-		status = "okay";
-		compatible = "nxp,pca9534";
-		reg = <0x20>;
-		gpio-controller;
-		#gpio-cells = <2>;
-
-		usb3_sel_hog {
-			gpio-hog;
-			gpio-hog-optional;
-			gpios = <4 0>;
-			output-low;
-			line-name = "usb3_sel";
-		};
-
-		eth1_phy_rst_hog {
-			gpio-hog;
-			gpio-hog-optional;
-			gpios = <5 0>;
-			output-high;
-			line-name = "eth1_phy_rst";
-		};
-
-		eth1_phy_vsel_hog {
-			gpio-hog;
-			gpio-hog-optional;
-			gpios = <6 0>;
-			output-high;
-			line-name = "eth1_phy_vsel";
-		};
-
-		eth1_phy_pwr_hog {
-			gpio-hog;
-			gpio-hog-optional;
-			gpios = <7 0>;
-			output-high;
-			line-name = "eth1_phy_pwr";
-		};
-	};
+//	eeprom@50 {
+//		compatible = "atmel,24c02";
+//		reg = <0x50>;
+//		status = "okay";
+//	};
 };
 
+//&i2c3 {
+//	clock-frequency = <100000>;
+//	pinctrl-names = "default", "gpio";
+//	pinctrl-0 = <&pinctrl_i2c3>;
+//	pinctrl-1 = <&pinctrl_i2c3_gpio>;
+//	scl-gpios = <&gpio5 18 GPIO_ACTIVE_HIGH>;
+//	sda-gpios = <&gpio5 19 GPIO_ACTIVE_HIGH>;
+//	status = "okay";
+//
+//	/* GPIO expander */
+//	pca9534: gpio@20 {
+//		status = "okay";
+//		compatible = "nxp,pca9534";
+//		reg = <0x20>;
+//		gpio-controller;
+//		#gpio-cells = <2>;
+//
+//		usb3_sel_hog {
+//			gpio-hog;
+//			gpio-hog-optional;
+//			gpios = <4 0>;
+//			output-low;
+//			line-name = "usb3_sel";
+//		};
+//
+//		eth1_phy_rst_hog {
+//			gpio-hog;
+//			gpio-hog-optional;
+//			gpios = <5 0>;
+//			output-high;
+//			line-name = "eth1_phy_rst";
+//		};
+//
+//		eth1_phy_vsel_hog {
+//			gpio-hog;
+//			gpio-hog-optional;
+//			gpios = <6 0>;
+//			output-high;
+//			line-name = "eth1_phy_vsel";
+//		};
+//
+//		eth1_phy_pwr_hog {
+//			gpio-hog;
+//			gpio-hog-optional;
+//			gpios = <7 0>;
+//			output-high;
+//			line-name = "eth1_phy_pwr";
+//		};
+//	};
+//};
+
 &i2c4 {
-	clock-frequency = <100000>;
+	clock-frequency = <400000>;
 	pinctrl-names = "default", "gpio";
 	pinctrl-0 = <&pinctrl_i2c4>;
 	pinctrl-1 = <&pinctrl_i2c4_gpio>;
@@ -173,13 +188,13 @@
 	};
 };
 
-&fec {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_fec>;
-	phy-mode = "rgmii";
-	phy-handle = <&ethphy1>;
-	status = "disabled";
-};
+//&fec {
+//	pinctrl-names = "default";
+//	pinctrl-0 = <&pinctrl_fec>;
+//	phy-mode = "rgmii";
+//	phy-handle = <&ethphy1>;
+//	status = "disabled";
+//};
 
 &iomuxc {
 
@@ -190,13 +205,20 @@
 		>;
 	};
 
-	pinctrl_i2c3: i2c3grp {
+	pinctrl_i2c2: i2c2grp {
 		fsl,pins = <
-			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL					0x400001c2
-			MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA					0x400001c2
+			MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL					0x400001c2
+			MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA					0x400001c2
 		>;
 	};
 
+//	pinctrl_i2c3: i2c3grp {
+//		fsl,pins = <
+//			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL					0x400001c2
+//			MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA					0x400001c2
+//		>;
+//	};
+//
 	pinctrl_i2c4: i2c4grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_I2C4_SCL__I2C4_SCL					0x400001c2
@@ -204,12 +226,12 @@
 		>;
 	};
 
-	pinctrl_i2c3_gpio: i2c3-gpiogrp {
-		fsl,pins = <
-			MX8MP_IOMUXC_I2C3_SCL__GPIO5_IO18				0x1c2
-			MX8MP_IOMUXC_I2C3_SDA__GPIO5_IO19				0x1c2
-		>;
-	};
+//	pinctrl_i2c3_gpio: i2c3-gpiogrp {
+//		fsl,pins = <
+//			MX8MP_IOMUXC_I2C3_SCL__GPIO5_IO18				0x1c2
+//			MX8MP_IOMUXC_I2C3_SDA__GPIO5_IO19				0x1c2
+//		>;
+//	};
 
 	pinctrl_i2c4_gpio: i2c4-gpiogrp {
 		fsl,pins = <
@@ -269,20 +291,20 @@
 		>;
 	};
 
-	pinctrl_fec: fecgrp {
-		fsl,pins = <
-			MX8MP_IOMUXC_SAI1_RXD4__ENET1_RGMII_RD0				0x90
-			MX8MP_IOMUXC_SAI1_RXD5__ENET1_RGMII_RD1				0x90
-			MX8MP_IOMUXC_SAI1_RXD6__ENET1_RGMII_RD2				0x90
-			MX8MP_IOMUXC_SAI1_RXD7__ENET1_RGMII_RD3				0x90
-			MX8MP_IOMUXC_SAI1_TXC__ENET1_RGMII_RXC				0x90
-			MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL			0x90
-			MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0				0x16
-			MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1				0x16
-			MX8MP_IOMUXC_SAI1_TXD2__ENET1_RGMII_TD2				0x16
-			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3				0x16
-			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL			0x16
-			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC				0x16
-		>;
-	};
+//	pinctrl_fec: fecgrp {
+//		fsl,pins = <
+//			MX8MP_IOMUXC_SAI1_RXD4__ENET1_RGMII_RD0				0x90
+//			MX8MP_IOMUXC_SAI1_RXD5__ENET1_RGMII_RD1				0x90
+//			MX8MP_IOMUXC_SAI1_RXD6__ENET1_RGMII_RD2				0x90
+//			MX8MP_IOMUXC_SAI1_RXD7__ENET1_RGMII_RD3				0x90
+//			MX8MP_IOMUXC_SAI1_TXC__ENET1_RGMII_RXC				0x90
+//			MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL			0x90
+//			MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0				0x16
+//			MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1				0x16
+//			MX8MP_IOMUXC_SAI1_TXD2__ENET1_RGMII_TD2				0x16
+//			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3				0x16
+//			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL			0x16
+//			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC				0x16
+//		>;
+//	};
 };
