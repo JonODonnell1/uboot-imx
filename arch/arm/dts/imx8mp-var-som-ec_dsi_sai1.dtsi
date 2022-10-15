@@ -10,7 +10,7 @@
 #include "imx8mp.dtsi"
 
 / {
-	compatible = "variscite,imx8mp-var-som-ec_dsi_sai1", "fsl,imx8mp";
+	compatible = "variscite,imx8mp-var-som-ec_dsi_sai1", "variscite,imx8mp-var-som", "fsl,imx8mp";
 
 	aliases {
 		ethernet0 = &eqos;
@@ -30,9 +30,8 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		ethphy0: ethernet-phy@0 {
-			compatible = "ethernet-phy-ieee802.3-c22";
-			reg = <0>;
+		ethphy0: ethernet-phy@4 {
+			reg = <4>;
 			qca,clk-out-frequency = <125000000>;
 			qca,keep-pll-enabled;
 			vddio-supply = <&vddio>;
@@ -50,8 +49,8 @@
 	pinctrl-names = "default", "gpio";
 	pinctrl-0 = <&pinctrl_i2c1>;
 	pinctrl-1 = <&pinctrl_i2c1_gpio>;
-	scl-gpios = <&gpio5 14 GPIO_ACTIVE_HIGH>;
-	sda-gpios = <&gpio5 15 GPIO_ACTIVE_HIGH>;
+	scl-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
+	sda-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 };
 
@@ -102,22 +101,22 @@
 			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3			0x16
 			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL			0x16
 			MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x16
-			MX8MP_IOMUXC_SD1_STROBE__GPIO2_IO11				0x10
+			MX8MP_IOMUXC_GPIO1_IO10__GPIO1_IO10				0x10
 			MX8MP_IOMUXC_SD2_WP__GPIO2_IO20					0x10
 		>;
 	};
 
 	pinctrl_i2c1: i2c1grp {
 		fsl,pins = <
-			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL					0x400001c2
-			MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA					0x400001c2
+			MX8MP_IOMUXC_SD1_DATA4__I2C1_SCL				0x400001c2
+			MX8MP_IOMUXC_SD1_DATA5__I2C1_SDA				0x400001c2
 		>;
 	};
 
 	pinctrl_i2c1_gpio: i2c1-gpiogrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_I2C1_SCL__GPIO5_IO14				0x1c2
-			MX8MP_IOMUXC_I2C1_SDA__GPIO5_IO15				0x1c2
+			MX8MP_IOMUXC_SD1_DATA4__GPIO2_IO06				0x1c2
+			MX8MP_IOMUXC_SD1_DATA5__GPIO2_IO07				0x1c2
 		>;
 	};
 
