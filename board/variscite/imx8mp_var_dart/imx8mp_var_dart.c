@@ -23,7 +23,8 @@
 #include <dwc3-uboot.h>
 #include <power/regulator.h>
 #include <linux/delay.h>
-
+#include <dm.h>
+#include <i2c.h>
 #include "../common/imx8_eeprom.h"
 #include "imx8mp_var_dart.h"
 
@@ -339,6 +340,9 @@ int board_late_init(void)
 	int board_id;
 	char sdram_size_str[SDRAM_SIZE_STR_LEN];
 	struct var_eeprom *ep = VAR_EEPROM_DATA;
+	struct udevice *bus, *dev;
+	int ret;
+	uint8_t bytes[257] = { '\0', };
 
 #ifdef CONFIG_ENV_IS_IN_MMC
 	board_late_mmc_env_init();
@@ -368,8 +372,46 @@ int board_late_init(void)
 			env_set("dart_carrier_rev", "legacy");
 	}
 
-	var_setup_mac(ep);
+//	var_setup_mac(ep);
 	var_eeprom_print_prod_info(ep);
+
+	printf("\n\nAutonomic\n");
+	ret =uclass_get_device_by_seq(UCLASS_I2C, 1, &bus);
+	if (ret) {
+		printf("  Failed to get bus\n");
+	}
+	else {
+		ret = i2c_get_chip(bus, 0x50, 1, &dev);
+		if (ret) {
+			printf("  Failed to get chip\n");
+		}
+		else {
+			dm_i2c_read(dev, 0, bytes, 256);
+			if (bytes[0] != 'M' && bytes[1] != 'M' && bytes[2] != 'S') {
+				printf("  Incorrect eeprom header\n");
+			}
+			else {
+				if (bytes[3] != 0x1) {
+					printf("  Unknown eeprom version %d\n", bytes[3]);
+				}
+				else {
+					eth_env_set_enetaddr("ethaddr", bytes + 4);
+
+					/* SKU byte 10 onwards */
+					printf("  MAC: %pM\n", bytes + 4);
+					printf("  SKU: %s\n", (char *)bytes + 10);
+
+					/* Serial string behind SKU */
+					printf("  Serial: %s\n", (char *)bytes + 10 + strlen((char *)bytes + 10) + 1);
+				}
+			}
+		}
+	}
+	printf("\n");
+
+
+
+
 
 	return 0;
 }
