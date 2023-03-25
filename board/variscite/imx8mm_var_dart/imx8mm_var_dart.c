@@ -195,7 +195,7 @@ int board_late_init(void)
 	int id = get_board_id();
 	struct var_eeprom *ep = VAR_EEPROM_DATA;
 	struct var_carrier_eeprom carrier_eeprom;
-	char carrier_rev[16] = {0};
+	char carrier_rev[CARRIER_REV_LEN] = {0};
 
 #ifdef CONFIG_FEC_MXC
 	var_setup_mac(ep);
@@ -231,10 +231,16 @@ int board_late_init(void)
 	else if (id == DART_MX8M_MINI) {
 
 		int carrier_rev = var_detect_dart_carrier_rev();
+		char carrier_rev_eeprom[16] = {0};
 
 		env_set("board_name", "DART-MX8M-MINI");
 
-		if (carrier_rev == DART_CARRIER_REV_2)
+		var_carrier_eeprom_read(CARRIER_EEPROM_BUS_DART, CARRIER_EEPROM_ADDR, &carrier_eeprom);
+		var_carrier_eeprom_get_revision(&carrier_eeprom, carrier_rev_eeprom, sizeof(carrier_rev_eeprom));
+
+		if (strcmp(carrier_rev_eeprom, "legacy"))
+			env_set("carrier_rev", carrier_rev_eeprom);
+		else if (carrier_rev == DART_CARRIER_REV_2)
 			env_set("carrier_rev", "dt8m-2.x");
 		else
 			env_set("carrier_rev", "legacy");
@@ -259,13 +265,6 @@ static iomux_v3_cfg_t const back_pads[] = {
 
 int is_recovery_key_pressing(void)
 {
-	imx_iomux_v3_setup_multiple_pads(back_pads, ARRAY_SIZE(back_pads));
-	gpio_request(BACK_KEY, "BACK");
-	gpio_direction_input(BACK_KEY);
-	if (gpio_get_value(BACK_KEY) == 0) { /* BACK key is low assert */
-		printf("Recovery key pressed\n");
-		return 1;
-	}
 	return 0;
 }
 #endif /*CONFIG_ANDROID_RECOVERY*/
