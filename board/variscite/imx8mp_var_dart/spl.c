@@ -174,7 +174,7 @@ int board_fit_config_name_match(const char *name)
 			!strcmp(name, "imx8mp-var-dart-dt8mcustomboard"))
 			return 0;
 	}
-//	else if ((board_id == BOARD_ID_SOM) && !strcmp(name, "imx8mp-var-som-m5pro"))
+//	else if ((board_id == BOARD_ID_SOM) && !strcmp(name, "imx8mp-var-som-ma6"))
 	else if ((board_id == BOARD_ID_SOM) && !strcmp(name, "imx8mp-var-som-symphony"))
 		return 0;
 
